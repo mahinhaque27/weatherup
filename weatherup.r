@@ -1,11 +1,13 @@
 library(httr)
 library(jsonlite)
 
-get_weather_data <- function(latitude, longitude) {
-  base_url <- "https://api.openweathermap.org/data/3.0/onecall"
-  query_list <- list(lat = latitude, lon = longitude, appid = "5a71604f5c27fb3935eab8439f762fce", units = "imperial")
-  
-  response <- GET(url = base_url, query = query_list)
+API_KEY <- "5a71604f5c27fb3935eab8439f762fce"
+BASE_WEATHER <- "https://api.openweathermap.org/data/3.0/onecall"
+BASE_GEO <- "http://api.openweathermap.org/geo/1.0/direct"
+
+getWeatherData <- function(latitude, longitude) {
+  query_list <- list(lat = latitude, lon = longitude, appid = API_KEY, units = "imperial")
+  response <- GET(url = BASE_WEATHER, query = query_list)
   
   if (response$status_code == 200) {
     weather_data <- fromJSON(rawToChar(response$content))
@@ -16,11 +18,9 @@ get_weather_data <- function(latitude, longitude) {
   }
 }
 
-get_location_data <- function(city, state) {
-  base_url <- "http://api.openweathermap.org/geo/1.0/direct"
-  query_list <- list(q = paste(city, state, "US", sep = ","), appid = "5a71604f5c27fb3935eab8439f762fce")
-  
-  response <- GET(url = base_url, query = query_list)
+getLocationData <- function(city, state) {
+  query_list <- list(q = paste(city, state, "US", sep = ","), appid = API_KEY)
+  response <- GET(url = BASE_GEO, query = query_list)
   
   if (response$status_code == 200) {
     location_data <- fromJSON(rawToChar(response$content))
@@ -28,7 +28,8 @@ get_location_data <- function(city, state) {
       stop("No location data found for the specified city and state.")
     }
     return(location_data)
-  } else {
+  } 
+  else {
     stop("Failed to fetch location data. Status code: ", response$status_code)
   }
 }
@@ -37,12 +38,12 @@ main <- function() {
   latitude <- 42.514458
   longitude <- -83.014656
   
-  weather_data <- get_weather_data(latitude, longitude)
-  location_data <- get_location_data("warren", "MI")
+  weather_data <- getWeatherData(latitude, longitude)
+  location_data <- getLocationData("Detroit", "MI")
   
   cat("The current temperature at the provided coordinates is", weather_data$current$temp, "°F\n")
   cat("The current latitude at the provided location is ", location_data$lat, "\n")
-  cat("The current latitude at the provided location is ", location_data$lon)
+  cat("The current longitude at the provided location is ", location_data$lon)
 
 }
 
