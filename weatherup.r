@@ -105,8 +105,10 @@ main <- function() {
   cat("4 Days From Now: It will be a low of",day5Low,"°F and a high of ",day5High,"°F.",day5desc,"\n")
   cat("5 Days From Now: It will be a low of",day6Low,"°F and a high of ",day6High,"°F.",day6desc,"\n")
   cat("6 Days From Now: It will be a low of",day7Low,"°F and a high of ",day7High,"°F.",day7desc,"\n")
-  cat("7 Days From Now: It will be a low of",day8Low,"°F and a high of ",day8High,"°F.",day8desc,"\n")
+  cat("7 Days From Now: It will be a low of",day8Low,"°F and a high of ",day8High,"°F.",day8desc,"\n\n")
   
+  cat("---------------Severe Weather Alerts--------------------------\n")
+  cat(weatherData$alerts$description)
   cat("\n")
 
 
